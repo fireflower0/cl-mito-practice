@@ -3,7 +3,7 @@
         :mito))
 (in-package :cl-mito-practice/app)
 
-(defparameter *app-root* (asdf:system-source-directory :database-test))
+(defparameter *app-root* (asdf:system-source-directory :cl-mito-practice))
 (defparameter *db-name*  (merge-pathnames #P"db/test.db" *app-root*))
 
 (connect-toplevel :sqlite3 :database-name *db-name*)
