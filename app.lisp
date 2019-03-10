@@ -1,21 +1,22 @@
 (defpackage :cl-mito-practice/app
   (:use :cl
-        :mito))
+        :mito)
+  (:export :main))
 (in-package :cl-mito-practice/app)
 
 (defparameter *app-root* (asdf:system-source-directory :cl-mito-practice))
 (defparameter *db-name*  (merge-pathnames #P"db/test.db" *app-root*))
 
-(connect-toplevel :sqlite3 :database-name *db-name*)
+(defclass user ()
+  ((name :col-type (:varchar 64)
+         :accessor user-name)
+   (email :col-type (or (:varchar 128) :null)
+          :accessor user-email))
+  (:metaclass dao-table-class))
 
-(deftable user ()
-  ((name  :col-type (:varchar 64))
-   (email :col-type (or (:varchar 128) :null))))
-
-(table-definition 'user)
-
-(deftable tweet ()
-  ((status :col-type :text)
-   (user   :col-type user)))
-
-(table-definition 'tweet)
+(defun main ()
+  (let ((my-obj (make-instance 'user
+                               :name "foo"
+                               :email "foo@foo.com")))
+    (format t "Name:~A~%"  (user-name my-obj))
+    (format t "EMail:~A~%" (user-email my-obj))))
